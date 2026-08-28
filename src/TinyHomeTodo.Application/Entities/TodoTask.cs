@@ -2,7 +2,7 @@ namespace TinyHomeTodo.Application.Entities;
 
 public class TodoTask
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     public string TaskDescription { get; set; } = string.Empty;
 

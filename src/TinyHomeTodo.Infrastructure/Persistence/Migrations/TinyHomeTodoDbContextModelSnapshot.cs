@@ -24,11 +24,8 @@ namespace TinyHomeTodo.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("TinyHomeTodo.Application.Entities.TodoTask", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Completed")
                         .HasColumnType("boolean");

@@ -12,7 +12,7 @@ using TinyHomeTodo.Infrastructure.Persistence;
 namespace TinyHomeTodo.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(TinyHomeTodoDbContext))]
-    [Migration("20260827214011_InitialCreate")]
+    [Migration("20260828124558_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -27,11 +27,8 @@ namespace TinyHomeTodo.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("TinyHomeTodo.Application.Entities.TodoTask", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("Completed")
                         .HasColumnType("boolean");

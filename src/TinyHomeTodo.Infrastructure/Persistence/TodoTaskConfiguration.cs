@@ -10,6 +10,9 @@ public class TodoTaskConfiguration : IEntityTypeConfiguration<TodoTask>
     {
         builder.HasKey(t => t.Id);
 
+        builder.Property(t => t.Id)
+            .ValueGeneratedNever();
+
         builder.Property(t => t.TaskDescription)
             .IsRequired();
 
