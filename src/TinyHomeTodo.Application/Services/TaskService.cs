@@ -43,6 +43,24 @@ public class TaskService : ITaskService
         return Map(task);
     }
 
+    public async Task<TaskResponseDto> UpdateAsync(UpdateTaskCommand command, CancellationToken ct = default)
+    {
+        if (command.RouteId != command.BodyId)
+        {
+            throw new BadRequestException("The id in the request body must match the id in the route.");
+        }
+
+        var task = await _repository.GetByIdAsync(command.RouteId, ct)
+            ?? throw new NotFoundException($"Task with id {command.RouteId} was not found.");
+
+        task.TaskDescription = command.TaskDescription;
+        task.Completed = command.Completed;
+        task.DueDate = command.DueDate;
+
+        await _repository.SaveChangesAsync(ct);
+        return Map(task);
+    }
+
     private static TaskResponseDto Map(TodoTask task) => new()
     {
         Id = task.Id,

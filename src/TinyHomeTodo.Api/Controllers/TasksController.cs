@@ -38,4 +38,12 @@ public class TasksController : ControllerBase
         var result = await _taskService.CreateAsync(command, ct);
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
+
+    [HttpPut("{id:guid}")]
+    public async Task<ActionResult<TaskResponseDto>> Update(Guid id, UpdateTaskRequestDto request, CancellationToken ct = default)
+    {
+        var command = new UpdateTaskCommand(id, request.Id, request.TaskDescription, request.Completed, request.DueDate);
+        var result = await _taskService.UpdateAsync(command, ct);
+        return Ok(result);
+    }
 }

@@ -42,7 +42,7 @@ public class EfTaskRepository : ITaskRepository
     public Task<TodoTask?> GetByIdAsync(Guid id, CancellationToken ct = default)
         => _db.Tasks.FirstOrDefaultAsync(t => t.Id == id, ct);
 
-    // Sync as recommended per EF documentation
+    // sync Add: Id is already set, nothing for the store to generate
     public void Add(TodoTask task) => _db.Tasks.Add(task);
 
     public Task<int> SaveChangesAsync(CancellationToken ct = default)
