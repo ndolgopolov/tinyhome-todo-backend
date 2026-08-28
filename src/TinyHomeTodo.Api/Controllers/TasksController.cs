@@ -16,8 +16,12 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TaskResponseDto>>> GetAll(CancellationToken ct)
+    public async Task<ActionResult<IEnumerable<TaskResponseDto>>> GetAll(
+        [FromQuery] bool? completed = null,
+        [FromQuery(Name = "sort_by")] string? sortBy = null,
+        CancellationToken ct = default)
     {
-        return Ok(await _taskService.GetAllAsync(ct));
+        var query = new TaskQuery(completed, TaskSort.Parse(sortBy));
+        return Ok(await _taskService.GetAllAsync(query, ct));
     }
 }

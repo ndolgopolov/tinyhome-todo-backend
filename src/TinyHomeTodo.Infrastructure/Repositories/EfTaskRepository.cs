@@ -14,10 +14,28 @@ public class EfTaskRepository : ITaskRepository
         _db = db;
     }
 
-    public async Task<List<TodoTask>> GetAllAsync(CancellationToken ct = default)
+    public async Task<List<TodoTask>> GetAllAsync(bool? completed, TaskSort sort, CancellationToken ct = default)
     {
-        return await _db.Tasks
-            .OrderBy(t => t.DueDate)
-            .ToListAsync(ct);
+        var query = _db.Tasks.AsQueryable();
+
+        if (completed.HasValue)
+        {
+            query = query.Where(t => t.Completed == completed.Value);
+        }
+
+        var ordered = sort switch
+        {
+            { Field: TaskSortField.DueDate, Direction: SortDirection.Asc } =>
+                query.OrderBy(t => t.DueDate == null).ThenBy(t => t.DueDate),
+            { Field: TaskSortField.DueDate, Direction: SortDirection.Desc } =>
+                query.OrderBy(t => t.DueDate == null).ThenByDescending(t => t.DueDate),
+            { Field: TaskSortField.CreatedDate, Direction: SortDirection.Asc } =>
+                query.OrderBy(t => t.CreatedDate),
+            { Field: TaskSortField.CreatedDate, Direction: SortDirection.Desc } =>
+                query.OrderByDescending(t => t.CreatedDate),
+            _ => throw new ArgumentOutOfRangeException(nameof(sort), sort, "Unhandled sort field/direction")
+        };
+
+        return await ordered.ThenBy(t => t.Id).ToListAsync(ct);
     }
 }

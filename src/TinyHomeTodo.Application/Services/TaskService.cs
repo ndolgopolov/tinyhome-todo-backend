@@ -13,9 +13,9 @@ public class TaskService : ITaskService
         _repository = repository;
     }
 
-    public async Task<List<TaskResponseDto>> GetAllAsync(CancellationToken ct = default)
+    public async Task<List<TaskResponseDto>> GetAllAsync(TaskQuery query, CancellationToken ct = default)
     {
-        var tasks = await _repository.GetAllAsync(ct);
+        var tasks = await _repository.GetAllAsync(query.Completed, query.Sort, ct);
         return tasks.Select(Map).ToList();
     }
 
