@@ -30,4 +30,12 @@ public class TasksController : ControllerBase
     {
         return Ok(await _taskService.GetByIdAsync(id, ct));
     }
+
+    [HttpPost]
+    public async Task<ActionResult<TaskResponseDto>> Create(CreateTaskRequestDto request, CancellationToken ct = default)
+    {
+        var command = new CreateTaskCommand(request.TaskDescription, request.Completed, request.DueDate);
+        var result = await _taskService.CreateAsync(command, ct);
+        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+    }
 }

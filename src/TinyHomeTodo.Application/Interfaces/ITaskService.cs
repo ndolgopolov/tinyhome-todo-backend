@@ -7,4 +7,6 @@ public interface ITaskService
     Task<List<TaskResponseDto>> GetAllAsync(TaskQuery query, CancellationToken ct = default);
 
     Task<TaskResponseDto> GetByIdAsync(Guid id, CancellationToken ct = default);
+
+    Task<TaskResponseDto> CreateAsync(CreateTaskCommand command, CancellationToken ct = default);
 }

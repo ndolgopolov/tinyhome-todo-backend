@@ -27,6 +27,22 @@ public class TaskService : ITaskService
         return Map(task);
     }
 
+    public async Task<TaskResponseDto> CreateAsync(CreateTaskCommand command, CancellationToken ct = default)
+    {
+        var task = new TodoTask
+        {
+            TaskDescription = command.TaskDescription,
+            Completed = command.Completed ?? false,
+            DueDate = command.DueDate,
+            CreatedDate = DateTime.UtcNow
+        };
+
+        _repository.Add(task);
+        await _repository.SaveChangesAsync(ct);
+
+        return Map(task);
+    }
+
     private static TaskResponseDto Map(TodoTask task) => new()
     {
         Id = task.Id,
