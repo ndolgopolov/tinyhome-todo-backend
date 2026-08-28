@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TinyHomeTodo.Api.Middleware;
+using TinyHomeTodo.Application.Dtos;
 using TinyHomeTodo.Application.Interfaces;
 using TinyHomeTodo.Application.Services;
 using TinyHomeTodo.Infrastructure.Persistence;
@@ -9,7 +11,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var message = context.ModelState.Values
+            .SelectMany(entry => entry.Errors)
+            .Select(error => error.ErrorMessage)
+            .FirstOrDefault(text => !string.IsNullOrWhiteSpace(text)) ?? "Invalid request.";
+
+        return new BadRequestObjectResult(new ErrorResponseDto { Message = message });
+    };
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

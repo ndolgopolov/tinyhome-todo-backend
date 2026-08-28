@@ -1,3 +1,5 @@
+using TinyHomeTodo.Application.Exceptions;
+
 namespace TinyHomeTodo.Application.Interfaces;
 
 public enum TaskSortField
@@ -36,7 +38,7 @@ public record TaskSort(TaskSortField Field, SortDirection Direction)
         {
             "duedate" => TaskSortField.DueDate,
             "createddate" => TaskSortField.CreatedDate,
-            _ => throw new ArgumentException($"Unknown sort field '{raw}'.")
+            _ => throw new BadRequestException($"Unknown sort_by value '{raw}'.")
         };
 
         return new TaskSort(field, direction);
