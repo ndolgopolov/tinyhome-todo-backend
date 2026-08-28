@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TinyHomeTodo.Api.Middleware;
 using TinyHomeTodo.Application.Interfaces;
 using TinyHomeTodo.Application.Services;
 using TinyHomeTodo.Infrastructure.Persistence;
@@ -19,6 +20,8 @@ builder.Services.AddScoped<ITaskRepository, EfTaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

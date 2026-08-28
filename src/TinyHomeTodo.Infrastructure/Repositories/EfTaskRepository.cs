@@ -38,4 +38,7 @@ public class EfTaskRepository : ITaskRepository
 
         return await ordered.ThenBy(t => t.Id).ToListAsync(ct);
     }
+
+    public Task<TodoTask?> GetByIdAsync(Guid id, CancellationToken ct = default)
+        => _db.Tasks.FirstOrDefaultAsync(t => t.Id == id, ct);
 }

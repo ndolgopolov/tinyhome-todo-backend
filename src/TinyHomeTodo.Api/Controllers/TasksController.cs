@@ -24,4 +24,10 @@ public class TasksController : ControllerBase
         var query = new TaskQuery(completed, TaskSort.Parse(sortBy));
         return Ok(await _taskService.GetAllAsync(query, ct));
     }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<TaskResponseDto>> GetById(Guid id, CancellationToken ct = default)
+    {
+        return Ok(await _taskService.GetByIdAsync(id, ct));
+    }
 }

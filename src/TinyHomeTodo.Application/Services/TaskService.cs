@@ -1,5 +1,6 @@
 using TinyHomeTodo.Application.Dtos;
 using TinyHomeTodo.Application.Entities;
+using TinyHomeTodo.Application.Exceptions;
 using TinyHomeTodo.Application.Interfaces;
 
 namespace TinyHomeTodo.Application.Services;
@@ -17,6 +18,13 @@ public class TaskService : ITaskService
     {
         var tasks = await _repository.GetAllAsync(query.Completed, query.Sort, ct);
         return tasks.Select(Map).ToList();
+    }
+
+    public async Task<TaskResponseDto> GetByIdAsync(Guid id, CancellationToken ct = default)
+    {
+        var task = await _repository.GetByIdAsync(id, ct)
+            ?? throw new NotFoundException($"Task with id {id} was not found.");
+        return Map(task);
     }
 
     private static TaskResponseDto Map(TodoTask task) => new()
