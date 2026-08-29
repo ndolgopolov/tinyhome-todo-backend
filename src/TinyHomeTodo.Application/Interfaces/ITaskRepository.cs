@@ -10,5 +10,7 @@ public interface ITaskRepository
 
     void Add(TodoTask task);
 
+    void Remove(TodoTask task);
+
     Task<int> SaveChangesAsync(CancellationToken ct = default);
 }

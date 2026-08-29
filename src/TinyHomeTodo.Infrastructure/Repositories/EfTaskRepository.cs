@@ -45,6 +45,8 @@ public class EfTaskRepository : ITaskRepository
     // sync Add: Id is already set, nothing for the store to generate
     public void Add(TodoTask task) => _db.Tasks.Add(task);
 
+    public void Remove(TodoTask task) => _db.Tasks.Remove(task);
+
     public Task<int> SaveChangesAsync(CancellationToken ct = default)
         => _db.SaveChangesAsync(ct);
 }

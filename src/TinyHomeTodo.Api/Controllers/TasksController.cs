@@ -46,4 +46,11 @@ public class TasksController : ControllerBase
         var result = await _taskService.UpdateAsync(command, ct);
         return Ok(result);
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct = default)
+    {
+        await _taskService.DeleteAsync(id, ct);
+        return NoContent();
+    }
 }

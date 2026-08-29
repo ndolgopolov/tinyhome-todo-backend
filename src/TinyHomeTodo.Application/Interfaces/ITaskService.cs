@@ -11,4 +11,6 @@ public interface ITaskService
     Task<TaskResponseDto> CreateAsync(CreateTaskCommand command, CancellationToken ct = default);
 
     Task<TaskResponseDto> UpdateAsync(UpdateTaskCommand command, CancellationToken ct = default);
+
+    Task DeleteAsync(Guid id, CancellationToken ct = default);
 }

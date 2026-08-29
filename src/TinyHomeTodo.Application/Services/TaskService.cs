@@ -61,6 +61,15 @@ public class TaskService : ITaskService
         return Map(task);
     }
 
+    public async Task DeleteAsync(Guid id, CancellationToken ct = default)
+    {
+        var task = await _repository.GetByIdAsync(id, ct)
+            ?? throw new NotFoundException($"Task with id {id} was not found.");
+
+        _repository.Remove(task);
+        await _repository.SaveChangesAsync(ct);
+    }
+
     private static TaskResponseDto Map(TodoTask task) => new()
     {
         Id = task.Id,
