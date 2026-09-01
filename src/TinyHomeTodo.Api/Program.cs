@@ -50,6 +50,28 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 
 var app = builder.Build();
 
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<TinyHomeTodoDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+    const int maxAttempts = 5;
+    for (var attempt = 1; attempt <= maxAttempts; attempt++)
+    {
+        try
+        {
+            db.Database.Migrate();
+            break;
+        }
+        catch (Exception ex) when (attempt < maxAttempts)
+        {
+            logger.LogWarning(ex, "Database migration attempt {Attempt}/{MaxAttempts} failed, retrying...", attempt, maxAttempts);
+            Thread.Sleep(TimeSpan.FromSeconds(attempt * 2));
+        }
+    }
+}
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
