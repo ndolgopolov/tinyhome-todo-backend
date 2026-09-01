@@ -29,6 +29,11 @@ public class TaskService : ITaskService
 
     public async Task<TaskResponseDto> CreateAsync(CreateTaskCommand command, CancellationToken ct = default)
     {
+        if (command.DueDate is { } dueDate && dueDate.Kind != DateTimeKind.Utc)
+        {
+            throw new BadRequestException("dueDate must be sent in UTC, e.g. 2026-08-30T00:00:00Z.");
+        }
+
         var task = new TodoTask
         {
             TaskDescription = command.TaskDescription,
@@ -48,6 +53,11 @@ public class TaskService : ITaskService
         if (command.RouteId != command.BodyId)
         {
             throw new BadRequestException("The id in the request body must match the id in the route.");
+        }
+
+        if (command.DueDate is { } dueDate && dueDate.Kind != DateTimeKind.Utc)
+        {
+            throw new BadRequestException("dueDate must be sent in UTC, e.g. 2026-08-30T00:00:00Z.");
         }
 
         var task = await _repository.GetByIdAsync(command.RouteId, ct)
