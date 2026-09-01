@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+using TinyHomeTodo.Application.Validation;
 
 namespace TinyHomeTodo.Application.Dtos;
 
@@ -6,7 +6,7 @@ namespace TinyHomeTodo.Application.Dtos;
 public class UpdateTaskRequestDto
 {
     public Guid Id { get; init; }
-    [Required]
+    [NotBlank]
     public string TaskDescription { get; init; } = string.Empty;
     public bool Completed { get; init; }
     public DateTime? DueDate { get; init; }
