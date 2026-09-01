@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyHomeTodo.Api", "src\Tin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyHomeTodo.Application", "src\TinyHomeTodo.Application\TinyHomeTodo.Application.csproj", "{D766D5D9-2CB3-441D-8682-6DA93F8EB3F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyHomeTodo.Infrastructure", "src\TinyHomeTodo.Infrastructure\TinyHomeTodo.Infrastructure.csproj", "{58EB58B8-CCDB-4A7A-ADDC-F511D550F359}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{D766D5D9-2CB3-441D-8682-6DA93F8EB3F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D766D5D9-2CB3-441D-8682-6DA93F8EB3F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D766D5D9-2CB3-441D-8682-6DA93F8EB3F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58EB58B8-CCDB-4A7A-ADDC-F511D550F359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58EB58B8-CCDB-4A7A-ADDC-F511D550F359}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58EB58B8-CCDB-4A7A-ADDC-F511D550F359}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58EB58B8-CCDB-4A7A-ADDC-F511D550F359}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,5 +36,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F131597E-3B40-412C-A903-40C7BD368187} = {5D27AADC-E558-4EFE-BD3C-29D61ACFF6DD}
 		{D766D5D9-2CB3-441D-8682-6DA93F8EB3F5} = {5D27AADC-E558-4EFE-BD3C-29D61ACFF6DD}
+		{58EB58B8-CCDB-4A7A-ADDC-F511D550F359} = {5D27AADC-E558-4EFE-BD3C-29D61ACFF6DD}
 	EndGlobalSection
 EndGlobal
