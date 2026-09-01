@@ -103,3 +103,15 @@ in `Infrastructure` only to wire up EF at startup.
 - No auth, single user, every task is visible to everyone.
 - Controllers rather than Minimal API, mostly for the consistent `400` shape without extra
   wiring.
+
+## Not done
+
+Deliberate cuts for the exercise:
+
+- **Tests.** No test project. I checked the endpoints by hand with Swagger and curl.
+  Unit tests for `TaskService` and an integration pass over `WebApplicationFactory` are
+  the first thing I'd add.
+- **Auth.** Single-user, no authentication. A real scheme lands in the composition root
+  and a per-caller filter on the queries. The domain does not change.
+- **Pagination.** `GET /api/tasks` returns the whole table. Real volume would need
+  `page` / `pageSize` and a `{ data, total }` envelope.
