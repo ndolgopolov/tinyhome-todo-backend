@@ -1,0 +1,64 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-tinyhome}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      # host 5432 is often taken by a local postgres, expose on 5433
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-tinyhome}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: src/TinyHomeTodo.Api/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-tinyhome};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}"
+    ports:
+      - "8090:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  seed:
+    image: postgres:16-alpine
+    profiles: ["seed"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGHOST: postgres
+      PGDATABASE: ${POSTGRES_DB:-tinyhome}
+      PGUSER: ${POSTGRES_USER:-postgres}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - ./scripts/seed-dev-data.sql:/seed.sql:ro
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        # the Tasks table is created by the api service's startup migration, so poll for it first
+        i=1
+        while [ $$i -le 30 ]; do
+          if psql -tAc 'SELECT 1 FROM "Tasks" LIMIT 1' >/dev/null 2>&1; then found=1; break; fi
+          echo "waiting for the Tasks table ($$i/30)"
+          i=$$((i + 1))
+          sleep 2
+        done
+        if [ -z "$$found" ]; then
+          echo "Tasks table never appeared, start the api service so it can run migrations" >&2
+          exit 1
+        fi
+        psql -v ON_ERROR_STOP=1 -f /seed.sql
+
+volumes:
+  pgdata:
