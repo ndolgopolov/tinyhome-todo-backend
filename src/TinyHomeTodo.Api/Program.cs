@@ -1,6 +1,9 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using TinyHomeTodo.Api.Middleware;
+using TinyHomeTodo.Api.Swagger;
 using TinyHomeTodo.Application.Dtos;
 using TinyHomeTodo.Application.Interfaces;
 using TinyHomeTodo.Application.Services;
@@ -27,7 +30,17 @@ builder.Services.AddControllers(options =>
     };
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "TinyHome To-Do API",
+        Version = "v1"
+    });
+    options.SupportNonNullableReferenceTypes();
+    options.SchemaFilter<RequiredNonNullableSchemaFilter>();
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+});
 
 builder.Services.AddDbContext<TinyHomeTodoDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
