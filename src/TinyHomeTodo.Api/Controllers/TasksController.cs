@@ -25,7 +25,7 @@ public class TasksController : ControllerBase
         return Ok(await _taskService.GetAllAsync(query, ct));
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<TaskResponseDto>> GetById(Guid id, CancellationToken ct = default)
     {
         return Ok(await _taskService.GetByIdAsync(id, ct));
@@ -39,7 +39,7 @@ public class TasksController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("{id}")]
     public async Task<ActionResult<TaskResponseDto>> Update(Guid id, UpdateTaskRequestDto request, CancellationToken ct = default)
     {
         var command = new UpdateTaskCommand(id, request.Id, request.TaskDescription, request.Completed, request.DueDate);
@@ -47,7 +47,7 @@ public class TasksController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken ct = default)
     {
         await _taskService.DeleteAsync(id, ct);
